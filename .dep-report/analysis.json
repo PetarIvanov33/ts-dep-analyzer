@@ -1,0 +1,128 @@
+{
+  "importMap": {
+    "arrayUtils.ts": [
+      "./mathUtils",
+      "./stringUtils",
+      "lodash",
+      "./templateUtils"
+    ],
+    "mathUtils.ts": [
+      "uuid"
+    ],
+    "statsUtils.ts": [
+      "./mathUtils",
+      "./stringUtils",
+      "./templateUtils",
+      "./arrayUtils"
+    ],
+    "stringUtils.ts": [
+      "./mathUtils",
+      "./templateUtils"
+    ],
+    "templateUtils.ts": [
+      "./mathUtils",
+      "./stringUtils"
+    ]
+  },
+  "graph": {
+    "nodes": [
+      "arrayUtils.ts",
+      "mathUtils.ts",
+      "statsUtils.ts",
+      "stringUtils.ts",
+      "templateUtils.ts"
+    ],
+    "edges": [
+      {
+        "from": "arrayUtils.ts",
+        "to": "mathUtils.ts"
+      },
+      {
+        "from": "arrayUtils.ts",
+        "to": "stringUtils.ts"
+      },
+      {
+        "from": "arrayUtils.ts",
+        "to": "templateUtils.ts"
+      },
+      {
+        "from": "statsUtils.ts",
+        "to": "mathUtils.ts"
+      },
+      {
+        "from": "statsUtils.ts",
+        "to": "stringUtils.ts"
+      },
+      {
+        "from": "statsUtils.ts",
+        "to": "templateUtils.ts"
+      },
+      {
+        "from": "statsUtils.ts",
+        "to": "arrayUtils.ts"
+      },
+      {
+        "from": "stringUtils.ts",
+        "to": "mathUtils.ts"
+      },
+      {
+        "from": "stringUtils.ts",
+        "to": "templateUtils.ts"
+      },
+      {
+        "from": "templateUtils.ts",
+        "to": "mathUtils.ts"
+      },
+      {
+        "from": "templateUtils.ts",
+        "to": "stringUtils.ts"
+      }
+    ]
+  },
+  "cycles": [
+    [
+      "templateUtils.ts",
+      "stringUtils.ts"
+    ]
+  ],
+  "llm": {
+    "version": "1.0",
+    "risks": [
+      "Cyclical dependencies detected, which can lead to runtime errors and complicate testing.",
+      "High coupling between modules increases the impact of changes and reduces reusability."
+    ],
+    "cycles_explained": [
+      {
+        "cycle": [
+          "templateUtils.ts",
+          "stringUtils.ts"
+        ],
+        "why": "templateUtils.ts imports stringUtils.ts and stringUtils.ts imports templateUtils.ts, creating a direct circular dependency. This creates risk as neither module can be reasoned about independently."
+      }
+    ],
+    "tight_clusters": [
+      {
+        "modules": [
+          "templateUtils.ts",
+          "stringUtils.ts",
+          "mathUtils.ts"
+        ],
+        "reason": "These modules form a tightly coupled cluster due to mutual dependencies. Changes in one module are likely to require changes in the others."
+      },
+      {
+        "modules": [
+          "arrayUtils.ts",
+          "statsUtils.ts"
+        ],
+        "reason": "arrayUtils.ts is imported by statsUtils.ts and statsUtils.ts imports arrayUtils.ts, creating a tightly coupled cluster."
+      }
+    ],
+    "refactor_recommendations": [
+      "Break the cycle between templateUtils.ts and stringUtils.ts by introducing an intermediate module or interface that both can depend on, without creating a cycle.",
+      "Decouple the tight cluster of templateUtils.ts, stringUtils.ts, and mathUtils.ts by identifying shared functionalities and extracting them into separate, independent modules.",
+      "Consider using dependency injection or inversion of control to reduce direct dependencies between modules.",
+      "Evaluate external libraries to replace internal utility functions, reducing internal dependencies (e.g., use a dedicated templating library instead of templateUtils.ts).",
+      "Break the dependency cycle between arrayUtils.ts and statsUtils.ts"
+    ]
+  }
+}
