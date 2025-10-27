@@ -88,8 +88,8 @@
   "llm": {
     "version": "1.0",
     "risks": [
-      "Cyclical dependencies detected, which can lead to runtime errors and complicate testing.",
-      "High coupling between modules increases the impact of changes and reduces reusability."
+      "Cyclical dependencies detected, which can lead to build issues, runtime errors, and difficulties in testing and maintenance.",
+      "High coupling between modules can make refactoring and feature addition more complex."
     ],
     "cycles_explained": [
       {
@@ -97,32 +97,27 @@
           "templateUtils.ts",
           "stringUtils.ts"
         ],
-        "why": "templateUtils.ts imports stringUtils.ts and stringUtils.ts imports templateUtils.ts, creating a direct circular dependency. This creates risk as neither module can be reasoned about independently."
+        "why": "templateUtils.ts imports stringUtils.ts, and stringUtils.ts imports templateUtils.ts, creating a circular dependency. This can cause initialization order problems and make reasoning about the code harder."
       }
     ],
     "tight_clusters": [
       {
         "modules": [
-          "templateUtils.ts",
-          "stringUtils.ts",
-          "mathUtils.ts"
-        ],
-        "reason": "These modules form a tightly coupled cluster due to mutual dependencies. Changes in one module are likely to require changes in the others."
-      },
-      {
-        "modules": [
           "arrayUtils.ts",
-          "statsUtils.ts"
+          "mathUtils.ts",
+          "statsUtils.ts",
+          "stringUtils.ts",
+          "templateUtils.ts"
         ],
-        "reason": "arrayUtils.ts is imported by statsUtils.ts and statsUtils.ts imports arrayUtils.ts, creating a tightly coupled cluster."
+        "reason": "These modules form a highly interconnected cluster, as many of them import each other. This suggests a lack of clear separation of concerns and potential for code duplication. Changes in one module may have cascading effects on others."
       }
     ],
     "refactor_recommendations": [
-      "Break the cycle between templateUtils.ts and stringUtils.ts by introducing an intermediate module or interface that both can depend on, without creating a cycle.",
-      "Decouple the tight cluster of templateUtils.ts, stringUtils.ts, and mathUtils.ts by identifying shared functionalities and extracting them into separate, independent modules.",
-      "Consider using dependency injection or inversion of control to reduce direct dependencies between modules.",
-      "Evaluate external libraries to replace internal utility functions, reducing internal dependencies (e.g., use a dedicated templating library instead of templateUtils.ts).",
-      "Break the dependency cycle between arrayUtils.ts and statsUtils.ts"
+      "Break the cycle between templateUtils.ts and stringUtils.ts by introducing an intermediate module or interface to decouple them.",
+      "Reduce coupling within the tight cluster of modules by identifying common functionalities and extracting them into separate, more focused modules.",
+      "Consider using dependency injection to reduce hard dependencies between modules.",
+      "Evaluate the use of interfaces to define contracts between modules, promoting loose coupling.",
+      "Analyze external dependencies (lodash, uuid) and ensure they are used appropriately and not contributing to unnecessary coupling."
     ]
   }
 }
